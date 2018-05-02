@@ -6,15 +6,16 @@ inventory = [None]
 power = False
 fuel = False
 cmdlist = None
+recipe = {'Memes':'6363'}
+alien = {'elec' : True, 'vent' :True}
 #introduction
 print("\n Welcome to Them!")
 print("This is a text-based adventure game.")
 print("To play the game, type your response to each prompt.")
 print("Typing 'INVENTORY' tells you what you're carrying.")
 print("Type 'HELP' at any time for game instructions.")
+print("Type 'CRAFT' to view recipe & craft items.")
 print("Type 'QUIT' to quit the game.")
-print("Type 'CRAFT' to craft items.")
-
 #start of game
 def start():
     print("\n Walking out of the airlock")
@@ -37,7 +38,7 @@ def cor1():
     print("There are 8 rooms")
     print("1 - Airlock leading to the Expedition Shuttle")
     print("2 - Spacesuit closet")
-    print("3 - Tools storage")
+    print("3 - Maintainance room")
     print("4 - A locked room that only the captain has access to")
     print("5 - Central Air Ventilation System")
     print("6 - Bio-Chemistry Laboratory")
@@ -88,10 +89,15 @@ def cen_AC():
     time.sleep(0.5)
     print("\n Central Air Ventilation Control Room")
     print("There is a vent big enough to crawl through here.")
-    print("You can make your way up to the upper deck, where the control room is,")
-    print("or down to the storage area.")
-    print("1 - Upper Deck")
-    print("2 - Storage Area")
+    if 'torch' in inventory or power == True:
+        print("You can make your way up to the upper deck, where the control room is,")
+        print("or down to the storage area.")
+        print("1 - Upper Deck")
+        print("2 - Storage Area")
+    else:
+        print("It's pitch black inside the vent, you are not sure where they lead")
+        print("1 - ?????")
+        print("2 - ?????")
     print("3 - Corridor 1")
     cmdlist = ['1', '2','3','4']
     cmd = getcmd(cmdlist)
@@ -119,12 +125,12 @@ def cen_AC():
         print("\nYou arrive at the storage unit")
         storage()
     elif cmd =='3':
-        print("\nYou are back in the")
+        print("\nYou are back in")
         cor1()
 def closet():
     print("\n Closet")
     print("There are spacesuits for expeditions like the one you have on. You don't need them on the ship.")
-    print("1 - Corridor 1")#needs fixing
+    print("1 - Corridor 1")#needs fixing - add bag?
     cmdlist = ['1']
     cmd = getcmd(cmdlist)
     if cmd == '1':
@@ -132,8 +138,9 @@ def closet():
 def supply():
     print("\nMaintainance room")
     print("There are tools for carrying out minor repairs.")
-    print("A torch lies on the floor")
-    print("1 - Corridor 1")#needs fixing add torch
+    if 'torch' not in inventory:
+        print("A torch lies on the floor")
+    print("1 - Corridor 1")
     if 'torch' not in inventory:
         print("2 - Pick up torch")
     cmdlist = ['1','2']
@@ -141,7 +148,7 @@ def supply():
     if cmd == '1':
         cor1()
     elif cmd == '2':
-        additem(torch)
+        additem('torch')
         supply()
 def SECRET():
     print("\n There's a massive f**king hole in the hull of the ship")
@@ -217,13 +224,16 @@ def lab_biochem():
     print("The smell? A kind of smelly smell, a smelly smell that smells ... smelly.")
     print("Or maybe that’s just the smell of the fertiliser.")
     print("Microscopes and test tubes lie scattered across the tables.")
-    print("On the desk, a container of a mold sample collected on the ship.")
-    print("It excreets acid capable of degrading metal.")
+    if 'torch' in inventory or power == True:
+        if 'mold' not in inventory:
+            print("On the desk, a container of a mold sample collected on the ship.")
+            print("It excreets acid capable of degrading metal.")
     print("1 - Collect fertiliser")
     print("2 - Smell fertiliser")
     print("3 - Corridor 1")
-    if 'mold' not in inventory:
-        print("4 - Collect mold")
+    if 'torch' in inventory or power == True:
+        if 'mold' not in inventory:
+            print("4 - Collect mold")
     cmdlist = ['1', '2', '3','4']
     cmd = getcmd(cmdlist)
 
@@ -264,15 +274,18 @@ def cor2():
         if power == True:
             lift()
         else:
-            print("The power is off. The emergency power is not enough to operate the lift")
+            print("The power is OFF. The emergency power is not enough to operate the lift")
             cor2()
     elif cmd == '5':
         lab_mat()
     elif cmd == '6':
         hub()
+def lab_mat():
+    print("Materials laboratory")
+
 def study_room():
     time.sleep(0.5)
-    print("\n There are plenty of physical and virtual books in here.")
+    print("\n There are plenty of physical and digital books in here.")
     print("The study lounge is divided into sections:\n -Biology\n -Chemistry\n -General\n -Physics\n -...")
     print("Your crewmate Kirthana is hunched over a desk, lifeless and bloody.")
     print("1 - Corridor 2")
@@ -282,13 +295,14 @@ def study_room():
 
     if cmd == '1':
         cor2()
-    elif cmd == '3':
+    elif cmd == '2':
         print("On her holographic bracelet, a book titled 'Boom!: The Chemistry and History of Explosives' is still opened.")
         print("Must be the last thing she was doing before something got her.")
         time.sleep(0.5)
         print("It reads:")
         print("...In the early days of explosives, a mixture of ammonium nitrate and fuel oil called ANFO was widely used as a bulk indistrial explosive...")
         time.sleep(1)
+        recipe['Explosive':'2006']
         study_room()
 #corridor3
 def cor3():
@@ -315,14 +329,14 @@ def bed2():
     print("\n There are two beds. One belonging to Emil and the other belonging to Louis.")
     print("On Louis' bed there is a note asking for help...")
     print("1 - Bathroom 2")
-    print("2 - Corridor 3")#needs fixing
+    print("2 - Corridor 3")#needs fixing - add mold notes
     cmdlist = ['1', '2']
     cmd = getcmd(cmdlist)
 
     if cmd == '1':
         bath2()
     elif cmd == '2':
-        cor4()
+        cor3()
 def bath2():
     print("\n You enter the bathroom. The stench is unbearable. You should probably leave.")
     print("1 - Bedroom 2")
@@ -464,7 +478,7 @@ def cor5():
     cmd = getcmd(cmdlist)
 
     if cmd == '1':
-        dining_room()
+        dine()
     elif cmd == '2':
         kitchen()
     elif cmd == '3':
@@ -510,10 +524,48 @@ def dine():
         cor5()
 
 #hel
+def ladder_bot():
+    print("\n To the left is the storage room and to the right is the electrical hub")
+    print("1 - Electrical hub")
+    print("2 - Storage room")
+    cmdlist = ['1', '2']
+    cmd = getcmd(cmdlist)
+
+    if cmd == '1':
+        print("The entrance to the electrical hub is blocked by the sliding door jamming on some storage boxes")
+        print("There's a small gap but not nearly large enough for you to squeeze through")
+        print("1 - Go back to ladder landing")
+        if 'explosive' in inventory:
+            print('2 - Use explosive to dislodge the boxes')
+        cmdlist = ['1', '2']
+        cmd = getcmd(cmdlist)
+        if cmd == '1':
+            ladder_bot()
+        if cmd == '2':
+            print("*crackling sound*")
+            print("The oil is on fire, you quickly close the container and shove it in the gap")
+            print("The sizzlings got louder")
+            """add failure bomb ?"""
+            time.sleep(1)
+            print("--BOOM !--")
+            time.sleep(2)
+            """add random death ?"""
+            print("Peaking your head out from the ladder chute")
+            print("Fragments from the boxes scatter the area")
+            """add item from boxes?"""
+            print("The door is still jammed in place but there's a chunk missing")
+            print("You crawl through")
+            """alien accidentally killed by explosion"""
+            alien['elec'] = False
+            print(str(alien['elec']))
+            elec_hub()
+    elif cmd == '2':
+        storage()
+
 def storage():
     time.sleep(1)
-    print("\n You enter the storage room of the ship.")
-    print("Three rovers and shelves with repair supplies line one side of the large room.")
+    print("\n STORAGE UNIT")
+    print("The expedition rover and shelves with repair supplies line one side of the large room.")
     print("You can hardly recognise Marco’s corpse but the rotting banana in his hand gives him away.")
     print("He lies next to the 3D printer")
     print("A lift is on one side of the room while a ladder going up is on the other.")
@@ -531,8 +583,8 @@ def storage():
         if power == True:
             lift()
         else:
-            print("\nThe power is off. The emergency power is not enough to operate the lift")
-            cor6()
+            print("\nThe power is OFF. The emergency power is not enough to operate the lift")
+            storage()
     elif cmd == '2':
         cor4()
     elif cmd == '3':
@@ -542,7 +594,7 @@ def storage():
         storage()
     elif cmd == '5':
         if power == False:
-            print("Printer IDLE, emergency power mode on")
+            print("Printer IDLE, emergency power mode ON")
             storage()
         elif power == True and 'cap_card' in inventory:
             print("--PERMISSION GRANTED--")
@@ -585,7 +637,7 @@ def elec_hub():
         if power == True:
             lift()
         else:
-            print("\nThe power is off. The emergency power is not enough to operate the lift")
+            print("\nThe power is OFF. The emergency power is not enough to operate the lift")
             elec_hub()
     elif cmd == '3':
         cor4()
@@ -619,7 +671,7 @@ def cor6():
         if power == True:
             lift()
         else:
-            print("The power is off. The emergency power is not enough to operate the lift")
+            print("The power is OFF. The emergency power is not enough to operate the lift")
             cor6()
     elif cmd == '4':
         esc1()
@@ -696,22 +748,12 @@ def lift():
         cor2()
     elif cmd == '3':
         ladder_bot()
-def ladder_bot():
-    print("\n To the left is the storage room and to the right is the electrical hub")
-    print("1 - Electrical hub")
-    print("2 - Storage room")
-    cmdlist = ['1', '2']
-    cmd = getcmd(cmdlist)
-    if cmd == '1':
-        elec_hub()
-    elif cmd == '2':
-        storage()
 
 #interaction
 def additem(item):
     inventory.append(item)
     print("\n > "+item + " added to INVENTORY")
-    time.sleep(1)
+    time.sleep(0.75)
     print('\nYou are still in the :')
     time.sleep(0.5)
 def getcmd(cmdlist):
@@ -729,8 +771,20 @@ def getcmd(cmdlist):
             print('-- %s' % (item))
         return getcmd(cmdlist)
     elif cmd == 'craft':
-        for item in recipe:
-            print('-- %s' % (item))
+        print("Recipe book")
+        for dish, code in recipe.items():
+            print('--' + dish + ' : ' + str(code))
+        make = input("Type crafting code\n")
+        if make == '2006':
+            explosive()
+        elif make == '2243':
+            acid()
+        elif make == '6363':
+            memes()
+        else:
+            print("You toss ingredients around aimlessly and hurt yourself in the process")
+            print("Who did you think you are ? Ratatouille ?")
+            time.sleep(0.75)
         return getcmd(cmdlist)
     elif cmd == 'quit':
         print("\nGoodbye cruel world")
@@ -740,16 +794,26 @@ def getcmd(cmdlist):
         return getcmd(cmdlist)
 def explosive():
     if (all(x in inventory for x in ['container','fertiliser','oil','battery'])) == True:
-        inventory.remove('container','fertiliser','oil','battery')
+        inventory.remove('container','fertiliser','oil')
+        time.sleep(0.5)
+        print("Hmmm ...Fertiliser is a good source of ammonium nitrate")
+        print("Oil would kick start the detonation")
+        print("The lithium-oxigen reaction from the battery could be used as a primer")
+        time.sleep(1)
         additem(explosive)
     else:
         print("\nYou don't have the items needed to make this\n")
+        time.sleep(0.75)
 def acid():
     if all(x in inventory for x in ['mold', 'water']) == True:
         inventory.remove('mold','water')
         additem(acid)
     else:
         print("\nYou don't have the items needed to make this\n")
+        time.sleep(0.75)
+def memes():
+    print("Hah, making memes in 3018")
+    time.sleep(0.75)
 #endgame
 def dead():
     time.sleep(0.5)
