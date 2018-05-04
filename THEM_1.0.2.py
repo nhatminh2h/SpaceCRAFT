@@ -19,7 +19,7 @@ print("Type 'QUIT' to quit the game.")
 #start of game
 def start():
     print("\n Walking out of the airlock")
-    print('where do you go?')
+    print('Where do you go?')
     print('1 - Corridor 1')
     print('2 - Back to Expedition Ship')
 
@@ -286,7 +286,7 @@ def lab_mat():
 def study_room():
     time.sleep(0.5)
     print("\n There are plenty of physical and digital books in here.")
-    print("The study lounge is divided into sections:\n -Biology\n -Chemistry\n -General\n -Physics\n -...")
+    print("The study lounge is divided into sections:\n -Biology\n -Chemistry\n -General\n -Physics\n -...\n")
     print("Your crewmate Kirthana is hunched over a desk, lifeless and bloody.")
     print("1 - Corridor 2")
     print("2 - Examine Kirthana's body")
@@ -297,12 +297,17 @@ def study_room():
         cor2()
     elif cmd == '2':
         print("On her holographic bracelet, a book titled 'Boom!: The Chemistry and History of Explosives' is still opened.")
-        print("Must be the last thing she was doing before something got her.")
-        time.sleep(0.5)
-        print("It reads:")
-        print("...In the early days of explosives, a mixture of ammonium nitrate and fuel oil called ANFO was widely used as a bulk indistrial explosive...")
+        print("Must be the last thing she was doing before something got her.\n")
         time.sleep(1)
-        recipe['Explosive':'2006']
+        print("Some texts were highlighted:")
+        time.sleep(1.5)
+        print("... In the early days of explosives, a mixture of ammonium nitrate and fuel oil called ANFO was widely used as a bulk indistrial explosive...")
+        time.sleep(3.5)
+        print("... ANFO is classified as a blasting agent, meaning that it decomposes through detonation...")
+        time.sleep(3.5)
+        print("... A larger quantity of secondary explosive, primer, must be used to set off ANFO, classifying it as a tertiary explosive...")
+        time.sleep(3.5)
+        recipe['Explosive']:'2006'
         study_room()
 #corridor3
 def cor3():
@@ -565,12 +570,13 @@ def ladder_bot():
 def storage():
     time.sleep(1)
     print("\n STORAGE UNIT")
-    print("The expedition rover and shelves with repair supplies line one side of the large room.")
+    print("The expedition rover & shelves with repair supplies line up along the back wall")
+    print("The door leading to the electrical hub can also be seen.")
+    print("A trail of blood & bits runs from the door to a corpse lying flat on the ground")
     print("You can hardly recognise Marco’s corpse but the rotting banana in his hand gives him away.")
     print("He lies next to the 3D printer")
-    print("A lift is on one side of the room while a ladder going up is on the other.")
+    print("You can see the lift from across the room")
     print("Life support systems, material supplies and oil reserves takes up the centre of the room.")
-    print("The door leading to the electrical hub can also be seen.")
     print("1 - Lift")
     print("2 - Ladder up")
     print("3 - Electrical hub")
