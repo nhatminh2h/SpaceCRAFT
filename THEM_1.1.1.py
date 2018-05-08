@@ -1,12 +1,13 @@
 #definitions
 import time
 from random import randint
-inventory = [None]
+import combatsys#combat system
 power = False
 fuel = False
 cmdlist = None
+#player
+inventory = [None]
 recipe = {'Memes':'6363'}
-alien = {'elec' : True, 'vent' :True}
 #introduction
 print("\n Welcome to Them!")
 print("This is a text-based adventure game.")
@@ -166,13 +167,14 @@ def med_bay():
         print("A scalpel lies on the floor.")
         print("Not very hygienic but it could come in handy later on….")
     print("1 - Corridor 1")
+    print("2 - ")
     if 'scalpel' not in inventory:
-        print("2 - Pick up scalpel")
-    cmdlist = ['1','2']
+        print("3 - Pick up scalpel")
+    cmdlist = ['1','2','3']
     cmd = getcmd(cmdlist)
     if cmd == '1':
         cor1()
-    elif cmd == '2':
+    elif cmd == '3':
         additem("scalpel")
         med_bay()
 #MAIN HUB
@@ -594,6 +596,8 @@ def storage():
         cor4()
     elif cmd == '3':
         elec_hub()
+        fight(player, alien_elec,2)
+        #needs fixing - add details
     elif cmd == '4':
         additem('oil')
         storage()
@@ -689,14 +693,15 @@ def ctrl_room():
     print("The fuel injection and charging controls lie to your right.")
     print("Up ahead of you are the steering controls for the ship,")
     if 'cap_card' not in inventory:
-        print("and lying on the floor next to a large open vent is your captain, Talha Jamal.")
+        print("and lying on the floor next to a large open vent is your Captain, Talha Jamal.")
         print("He looks seriously wounded.")
     print("1 - Approach fuelling and charging controls")
     print("2 - Enter vent")
     print("3 - Balcony")
+    print("4 - Kick the corpse")
     if 'cap_card' not in inventory:
-        print("4 - Examine captain's body")
-    cmdlist = ['1', '2', '3', '4']
+        print("5 - Examine captain's body")
+    cmdlist = ['1', '2', '3', '4','5']
     cmd = getcmd(cmdlist)
 
     if cmd == '1':
@@ -712,6 +717,10 @@ def ctrl_room():
     elif cmd == '3':
         cor6()
     elif cmd == '4':
+        print("You kicked Talha Jamal")
+        time.sleep(0.5)
+        ctrl_room()
+    elif cmd == '5':
         time.sleep(1.5)
         print("Captain TJ is dead. You see his keycard and decide to take it.")
         additem("cap_card")
@@ -736,6 +745,7 @@ def esc2_in():
     print("A stench of blood")
     time.sleep(2)
     print("A thing-Something is on the floor")
+    fight(player, alien_esc,1)
     #needs fixing
 #Lift
 def lift():
@@ -819,6 +829,7 @@ def acid():
 def memes():
     print("Hah, making memes in 3018")
     time.sleep(0.75)
+#combatsystem import in file
 #endgame
 def dead():
     time.sleep(0.5)

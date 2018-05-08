@@ -1,25 +1,50 @@
 from random import randint
-player = {'weapon':'None', 'health':10, 'healthmax':10}
-WEAPONS = {'pipe': (3,3), 'None':(1,1), 'scapel':(2,6), 'gun':(10,15)}
-alien = {'name':'thing', 'health':15, 'healthmax':15, 'attack':(3,5)}
-crew = {'name':'crew', 'health':7, 'healthmax':10, 'weapon':'None'}
+import time
+player = {'weapon':'metalpipe', 'health':100, 'healthmax':100}
+WEAPONS = {'metalpipe': (50,65), 'None':(10,10), 'scapel':(40,80), 'gun':(100,150), 'claws':(30,40), 'jaws':(50,70),'paws':(30,30)}
+alien_elec = {'name':'The thing', 'health':150, 'healthmax':150, 'weapon':'claws'}
+alien_esc = {'name':'The thing', 'health':150, 'healthmax':150, 'weapon':'jaws'}
+alien_ran = {'name':'The thing', 'health':150, 'healthmax':150, 'weapon':'paws'}
+crew = {'name':'Andy', 'health':70, 'healthmax':100, 'weapon':'None'}
 #combat system
-def combat (player, enemy):
+def combat (player, enemy, order):
+    time.sleep(0.75)
     while player['health'] > 0 and enemy['health'] >0:
-        player_damage = randint(WEAPONS[player['weapon']])
-        enemy_damage = randint(enemy['attack'])
-        player['health'] .__sub__(self,enemy_damage)
-        enemy['health'].__sub__(self,player_damage)
-        #description
-        print('You deal ' + player_damage + '. The enemy has : ' +enemy + ['health'] + '/' + enemy['healthmax'])
-        print('You receive ' + enemy_damage + '. You have : ' + player['health'] + '/' + player['healthmax'])
-    if player['health'] >0 and enemy['health'] <=0:#test if it reads enemy health from global or local
+        player_damage = randint(WEAPONS[player['weapon']][0],WEAPONS[player['weapon']][1])
+        enemy_damage = randint(WEAPONS[enemy['weapon']][0],WEAPONS[enemy['weapon']][1])
+        #1 means player attack first
+        if order == 1:
+            enemy['health'] = enemy['health'] - player_damage
+            if enemy['health'] > 0:
+                player['health'] = player['health']- enemy_damage
+                print('>You RECEIVE ' + str(enemy_damage) + ' dmg. You have : ' + str(player['health']) + '/' + str(player['healthmax'])+' HP')
+                time.sleep(2)
+            else:
+                print(">You narrowly dodged an attack and returned a blow")
+            print('>You DEAL ' + str(player_damage) + ' dmg. '+str(enemy['name'])+ ' has : ' + str(enemy['health']) + '/' + str(enemy['healthmax'])+' HP')
+        #2 means enemy attack first
+        elif order == 2:
+            player['health'] = player['health']- enemy_damage
+            if player['health'] > 0:
+                enemy['health'] = enemy['health'] - player_damage
+                print('>You DEAL ' + str(player_damage) + ' dmg. '+str(enemy['name'])+ ' has : ' + str(enemy['health']) + '/' + str(enemy['healthmax'])+' HP')
+                time.sleep(1)
+            else:
+                print(">The attack stuns you\n>Your ears ringing. Vision whiteout.")
+                time.sleep(3)
+            print('>You RECEIVE ' + str(enemy_damage) + ' dmg. You have : ' + str(player['health']) + '/' + str(player['healthmax'])+' HP')
+        time.sleep(2)
+    if player['health'] >0 and enemy['health'] <=0:
         return True
     else:
         return False
 #fight
-fight_result = combat(player, alien)
-if fight_result is True:
-    print("won")
-else:
-    print("lose")
+def fight(player, enemy, order):
+    fight_result = combat(player, enemy, order)
+    if fight_result is True:
+        print(str(enemy['name']) +" collapses")
+        print("won")
+    else:
+        print("Your body relaxes")
+        print("lose")
+fight(player, alien_elec, 2)
